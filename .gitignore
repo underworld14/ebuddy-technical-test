@@ -1,0 +1,11 @@
+*node_modules
+
+# editor
+docs/
+.cursor
+
+# firebase
+*firebase-service-account.json
+
+# build output
+*dist
