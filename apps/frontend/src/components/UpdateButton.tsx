@@ -14,12 +14,14 @@ import {
   Card,
   CardContent,
   Stack,
+  Divider,
 } from "@mui/material";
-import { Refresh, Edit } from "@mui/icons-material";
+import { Refresh, Edit, CloudQueue } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { updateUserData, fetchUserData } from "@/store/services/userService";
 import { clearMessages } from "@/store/slices/userSlice";
 import { User } from "@/apis/user";
+import { userApi } from "@/apis/userApi";
 
 export default function UpdateButton() {
   const [open, setOpen] = useState(false);
@@ -31,6 +33,14 @@ export default function UpdateButton() {
     totalAverageWeightRatings: "",
     numberOfRents: "",
   });
+  const [functionsTestResult, setFunctionsTestResult] = useState<{
+    success: boolean;
+    message?: string;
+    error?: string;
+    results?: Record<string, any>;
+    timestamp: string;
+  } | null>(null);
+  const [functionsTestLoading, setFunctionsTestLoading] = useState(false);
 
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user) as {
@@ -129,6 +139,7 @@ export default function UpdateButton() {
       totalAverageWeightRatings: "",
       numberOfRents: "",
     });
+    setFunctionsTestResult(null);
     dispatch(clearMessages());
   };
 
@@ -142,18 +153,49 @@ export default function UpdateButton() {
     setEditMode(true);
   };
 
+  const testFirebaseFunctions = async () => {
+    setFunctionsTestLoading(true);
+    setFunctionsTestResult(null);
+
+    try {
+      const result = await userApi.testFirebaseFunctions();
+      setFunctionsTestResult(result);
+    } catch (error: any) {
+      setFunctionsTestResult({
+        success: false,
+        error: error.message,
+        timestamp: new Date().toISOString(),
+      });
+    } finally {
+      setFunctionsTestLoading(false);
+    }
+  };
+
   return (
     <>
-      <Button
-        variant="contained"
-        startIcon={<Refresh />}
-        onClick={handleFetchUser}
-        disabled={isLoading}
-        size="large"
-        sx={{ minWidth: 200 }}
-      >
-        {isLoading ? "Loading..." : "Fetch User Data"}
-      </Button>
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+        <Button
+          variant="contained"
+          startIcon={<Refresh />}
+          onClick={handleFetchUser}
+          disabled={isLoading}
+          size="large"
+          sx={{ minWidth: 200 }}
+        >
+          {isLoading ? "Loading..." : "Fetch User Data"}
+        </Button>
+
+        <Button
+          variant="outlined"
+          startIcon={<CloudQueue />}
+          onClick={testFirebaseFunctions}
+          disabled={functionsTestLoading}
+          size="large"
+          color="secondary"
+        >
+          {functionsTestLoading ? "Testing..." : "Test Firebase Functions"}
+        </Button>
+      </Stack>
 
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle>
@@ -193,6 +235,41 @@ export default function UpdateButton() {
             <Alert severity="success" sx={{ mb: 2 }}>
               {successMessage}
             </Alert>
+          )}
+
+          {functionsTestResult && (
+            <>
+              <Alert
+                severity={functionsTestResult.success ? "success" : "error"}
+                sx={{ mb: 2 }}
+              >
+                <Typography variant="subtitle2">
+                  🔥 Firebase Functions Test Result
+                </Typography>
+                <Typography variant="body2">
+                  {functionsTestResult.success
+                    ? functionsTestResult.message
+                    : functionsTestResult.error}
+                </Typography>
+                {functionsTestResult.success && functionsTestResult.results && (
+                  <Box mt={1}>
+                    <Typography variant="caption" component="div">
+                      Health Check: ✅{" "}
+                      {functionsTestResult.results.healthCheck?.message}
+                    </Typography>
+                    <Typography variant="caption" component="div">
+                      Fetch Data: ✅{" "}
+                      {functionsTestResult.results.fetchUserData?.message}
+                    </Typography>
+                    <Typography variant="caption" component="div">
+                      Update Data: ✅{" "}
+                      {functionsTestResult.results.updateUserData?.message}
+                    </Typography>
+                  </Box>
+                )}
+              </Alert>
+              <Divider sx={{ mb: 2 }} />
+            </>
           )}
 
           {userData && !editMode && (

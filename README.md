@@ -172,3 +172,170 @@ The `@ebuddy/shared-types` package contains:
 | `pnpm run clean`    | Clean all build artifacts       |
 
 This monorepo setup ensures type consistency across the full stack while maintaining independent package development and deployment capabilities.
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js >= 22.0.0
+- pnpm package manager
+- Firebase CLI (for emulator testing)
+
+### Installation
+
+```bash
+# Install dependencies
+pnpm install
+
+# Build all packages
+pnpm run build
+```
+
+### Development
+
+```bash
+# Run backend only
+pnpm run backend
+
+# Run frontend only  
+pnpm run frontend
+
+# Run both frontend and backend
+pnpm run dev:all
+```
+
+## 🔥 Firebase Functions Emulator Testing
+
+This project includes Firebase Functions for local testing and emulator integration.
+
+### Setup Firebase Functions Emulator
+
+1. **Install Firebase CLI** (if not already installed):
+```bash
+npm install -g firebase-tools
+```
+
+2. **Build and start Firebase Functions emulator**:
+```bash
+# Build functions and start emulator
+pnpm run test:functions
+
+# Or manually:
+cd functions
+npm run build
+firebase emulators:start --only functions
+```
+
+3. **Test Frontend Connection**:
+   - Start the frontend: `pnpm run frontend`
+   - Open http://localhost:3000
+   - Click "Test Firebase Functions" button in the UpdateButton component
+   - Check for successful connection to emulator
+
+### Available Firebase Functions
+
+The emulator provides these placeholder functions for testing:
+
+- **`updateUserData`** - HTTP function for updating user data
+- **`fetchUserData`** - HTTP function for fetching user data  
+- **`testCallableFunction`** - Callable function for testing
+- **`healthCheck`** - Health check endpoint
+
+### Emulator URLs
+
+When running locally, functions are available at:
+- Functions: http://127.0.0.1:5001/your-project-id/us-central1/
+- Emulator UI: http://localhost:4000
+- Firestore: http://localhost:8080
+
+### Testing the Connection
+
+1. Start the Firebase Functions emulator:
+```bash
+pnpm run test:functions
+```
+
+2. Start the frontend development server:
+```bash
+pnpm run frontend
+```
+
+3. Navigate to the main page and click "Test Firebase Functions" button
+
+4. You should see success messages indicating the frontend can communicate with the Firebase Functions emulator
+
+## 📁 Project Structure
+
+```
+ebuddy/
+├── apps/
+│   ├── backend/          # Express.js API server
+│   └── frontend/         # Next.js React application
+├── functions/            # Firebase Functions for emulator testing
+├── packages/
+│   └── shared-types/     # Shared TypeScript interfaces
+├── firebase.json         # Firebase configuration
+└── package.json         # Monorepo configuration
+```
+
+## 🛠️ Technology Stack
+
+- **Backend**: Express.js + TypeScript + Firebase Admin SDK
+- **Frontend**: Next.js 14+ + React MUI + Redux Toolkit + TypeScript
+- **Database**: Firebase Firestore
+- **Authentication**: Firebase Auth
+- **Monorepo**: Turborepo
+- **Package Manager**: pnpm
+
+## 🧪 Testing Firebase Functions
+
+The project includes placeholder Firebase Functions to test emulator connectivity:
+
+### Local Testing Workflow
+
+1. **Start Firebase Emulator**:
+```bash
+pnpm run test:functions
+```
+
+2. **Verify Emulator is Running**:
+   - Check console output for emulator URLs
+   - Visit http://localhost:4000 for Firebase Emulator UI
+
+3. **Test Frontend Integration**:
+   - Start frontend with `pnpm run frontend`
+   - Use "Test Firebase Functions" button in the UI
+   - Check browser console for connection logs
+
+### Function Endpoints
+
+When emulator is running, you can test functions directly:
+
+```bash
+# Health check
+curl http://127.0.0.1:5001/your-project-id/us-central1/healthCheck
+
+# Fetch user data
+curl http://127.0.0.1:5001/your-project-id/us-central1/fetchUserData
+
+# Update user data
+curl -X POST http://127.0.0.1:5001/your-project-id/us-central1/updateUserData \
+  -H "Content-Type: application/json" \
+  -d '{"totalAverageWeightRatings": 4.5, "numberOfRents": 25}'
+```
+
+## 📝 Notes
+
+- Replace `your-project-id` in URLs with your actual Firebase project ID
+- Firebase Functions emulator runs on port 5001 by default
+- Emulator UI runs on port 4000 by default
+- Frontend is configured to automatically use emulator in development mode
+
+## 🎯 Completed Features
+
+- ✅ Backend API with Express.js + Firebase
+- ✅ Frontend with Next.js + React MUI + Redux
+- ✅ Monorepo setup with Turborepo
+- ✅ Firebase Functions emulator integration
+- ✅ Frontend-to-emulator connection testing
+- ✅ Placeholder functions for API testing

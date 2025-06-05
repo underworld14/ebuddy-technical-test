@@ -1,8 +1,8 @@
-import { Router } from "express";
+import { Router, type IRouter } from "express";
 import { updateUserData, fetchUserData } from "../controller/api";
 import { authMiddleware } from "../middleware/authMiddleware";
 
-const router = Router();
+const router: IRouter = Router();
 
 // Apply auth middleware to all user routes
 router.use(authMiddleware);
