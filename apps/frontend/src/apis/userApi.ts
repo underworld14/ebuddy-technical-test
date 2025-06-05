@@ -69,12 +69,12 @@ class UserApi {
     }
   }
 
-  async updateUserData(userData: {
+  async updateUserData(userData?: {
     totalAverageWeightRatings: number;
     numberOfRents: number;
   }): Promise<UserResponse> {
     return this.makeRequest<UserResponse>("/api/users/update-user-data", {
-      method: "POST",
+      method: "PATCH",
       body: JSON.stringify(userData),
     });
   }

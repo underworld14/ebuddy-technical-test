@@ -14,7 +14,7 @@ app.use(
   cors({
     origin: ["http://localhost:3000", "http://localhost:5000"], // Allow frontend and Firebase emulator
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );

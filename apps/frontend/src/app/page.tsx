@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -120,28 +121,6 @@ export default function HomePage() {
 
           <Box sx={{ mt: 4 }}>
             <UpdateButton />
-          </Box>
-
-          <Box
-            sx={{ mt: 4, p: 2, backgroundColor: "grey.50", borderRadius: 2 }}
-          >
-            <Typography variant="h6" gutterBottom>
-              Features:
-            </Typography>
-            <Typography
-              variant="body2"
-              component="div"
-              sx={{ textAlign: "left" }}
-            >
-              • Fetch user data from Firestore backend
-              <br />
-              • Update user ratings and rent count
-              <br />
-              • Real-time data validation
-              <br />
-              • Material UI responsive design
-              <br />• Firebase Authentication integration
-            </Typography>
           </Box>
         </Paper>
       </Container>

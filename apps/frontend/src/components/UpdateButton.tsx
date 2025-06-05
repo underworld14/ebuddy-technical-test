@@ -27,6 +27,10 @@ export default function UpdateButton() {
   const [totalAverageWeightRatings, setTotalAverageWeightRatings] =
     useState("");
   const [numberOfRents, setNumberOfRents] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({
+    totalAverageWeightRatings: "",
+    numberOfRents: "",
+  });
 
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user) as {
@@ -43,6 +47,14 @@ export default function UpdateButton() {
       await dispatch(fetchUserData()).unwrap();
       setOpen(true);
     } catch (error) {
+      await dispatch(
+        updateUserData({
+          totalAverageWeightRatings: 0,
+          numberOfRents: 0,
+        })
+      ).unwrap();
+      handleFetchUser();
+
       console.error("Fetch user error:", error);
     }
   };
@@ -51,13 +63,40 @@ export default function UpdateButton() {
     const ratings = parseFloat(totalAverageWeightRatings);
     const rents = parseInt(numberOfRents);
 
-    if (
-      isNaN(ratings) ||
-      isNaN(rents) ||
-      ratings < 0 ||
-      ratings > 5 ||
-      rents < 0
-    ) {
+    // Clear previous errors
+    setFieldErrors({
+      totalAverageWeightRatings: "",
+      numberOfRents: "",
+    });
+
+    const errors = {
+      totalAverageWeightRatings: "",
+      numberOfRents: "",
+    };
+
+    // Validate ratings
+    if (!totalAverageWeightRatings.trim()) {
+      errors.totalAverageWeightRatings = "Rating is required";
+    } else if (isNaN(ratings)) {
+      errors.totalAverageWeightRatings = "Please enter a valid number";
+    } else if (ratings < 0) {
+      errors.totalAverageWeightRatings = "Rating cannot be negative";
+    } else if (ratings > 5) {
+      errors.totalAverageWeightRatings = "Rating cannot exceed 5";
+    }
+
+    // Validate number of rents
+    if (!numberOfRents.trim()) {
+      errors.numberOfRents = "Number of rents is required";
+    } else if (isNaN(rents)) {
+      errors.numberOfRents = "Please enter a valid number";
+    } else if (rents < 0) {
+      errors.numberOfRents = "Number of rents cannot be negative";
+    }
+
+    // If there are validation errors, set them and return
+    if (errors.totalAverageWeightRatings || errors.numberOfRents) {
+      setFieldErrors(errors);
       return;
     }
 
@@ -72,6 +111,10 @@ export default function UpdateButton() {
       setEditMode(false);
       setTotalAverageWeightRatings("");
       setNumberOfRents("");
+      setFieldErrors({
+        totalAverageWeightRatings: "",
+        numberOfRents: "",
+      });
     } catch (error) {
       console.error("Update user error:", error);
     }
@@ -82,6 +125,10 @@ export default function UpdateButton() {
     setEditMode(false);
     setTotalAverageWeightRatings("");
     setNumberOfRents("");
+    setFieldErrors({
+      totalAverageWeightRatings: "",
+      numberOfRents: "",
+    });
     dispatch(clearMessages());
   };
 
@@ -220,10 +267,22 @@ export default function UpdateButton() {
                 label="Total Average Weight Ratings"
                 type="number"
                 value={totalAverageWeightRatings}
-                onChange={(e) => setTotalAverageWeightRatings(e.target.value)}
+                onChange={(e) => {
+                  setTotalAverageWeightRatings(e.target.value);
+                  // Clear error when user starts typing
+                  if (fieldErrors.totalAverageWeightRatings) {
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      totalAverageWeightRatings: "",
+                    }));
+                  }
+                }}
                 fullWidth
                 inputProps={{ min: 0, max: 5, step: 0.1 }}
-                helperText="Rating from 0 to 5"
+                error={!!fieldErrors.totalAverageWeightRatings}
+                helperText={
+                  fieldErrors.totalAverageWeightRatings || "Rating from 0 to 5"
+                }
                 required
               />
 
@@ -231,10 +290,22 @@ export default function UpdateButton() {
                 label="Number of Rents"
                 type="number"
                 value={numberOfRents}
-                onChange={(e) => setNumberOfRents(e.target.value)}
+                onChange={(e) => {
+                  setNumberOfRents(e.target.value);
+                  // Clear error when user starts typing
+                  if (fieldErrors.numberOfRents) {
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      numberOfRents: "",
+                    }));
+                  }
+                }}
                 fullWidth
                 inputProps={{ min: 0 }}
-                helperText="Total number of rentals"
+                error={!!fieldErrors.numberOfRents}
+                helperText={
+                  fieldErrors.numberOfRents || "Total number of rentals"
+                }
                 required
               />
             </Stack>
@@ -244,7 +315,17 @@ export default function UpdateButton() {
         <DialogActions>
           {editMode ? (
             <>
-              <Button onClick={() => setEditMode(false)}>Cancel</Button>
+              <Button
+                onClick={() => {
+                  setEditMode(false);
+                  setFieldErrors({
+                    totalAverageWeightRatings: "",
+                    numberOfRents: "",
+                  });
+                }}
+              >
+                Cancel
+              </Button>
               <Button
                 onClick={handleUpdateUser}
                 variant="contained"
