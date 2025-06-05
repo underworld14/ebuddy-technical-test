@@ -16,7 +16,7 @@ Next.js 14+ frontend with Material UI, Redux, and Firebase authentication for us
 1. **Install dependencies:**
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 2. **Configure environment variables:**
@@ -26,7 +26,7 @@ Next.js 14+ frontend with Material UI, Redux, and Firebase authentication for us
 
 3. **Start development server:**
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
 ## Environment Variables Required

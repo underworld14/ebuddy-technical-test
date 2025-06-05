@@ -58,31 +58,31 @@ npm install
 
 ```bash
 # Build all packages
-npm run build
+pnpm run build
 
 # Run all packages in development mode (parallel)
-npm run dev:all
+pnpm run dev:all
 
 # Run individual packages
-npm run backend       # Backend only
-npm run frontend      # Frontend only
-npm run shared        # Shared types in watch mode
+pnpm run backend       # Backend only
+pnpm run frontend      # Frontend only
+pnpm run shared        # Shared types in watch mode
 
 # Other commands
-npm run lint         # Lint all packages
-npm run test         # Test all packages
-npm run clean        # Clean all build artifacts
+pnpm run lint         # Lint all packages
+pnpm run test         # Test all packages
+pnpm run clean        # Clean all build artifacts
 ```
 
 ### Production
 
 ```bash
 # Build all packages for production
-npm run build:all
+pnpm run build:all
 
 # Start production servers
-npm run start:backend    # Start backend production server
-npm run start:frontend   # Start frontend production server
+pnpm run start:backend    # Start backend production server
+pnpm run start:frontend   # Start frontend production server
 ```
 
 ## Package Scripts
@@ -93,30 +93,30 @@ Each package has its own scripts that can be run independently:
 
 ```bash
 cd apps/backend
-npm run dev      # Development with nodemon
-npm run build    # TypeScript compilation
-npm run start    # Production server
-npm run clean    # Remove dist folder
+pnpm run dev      # Development with nodemon
+pnpm run build    # TypeScript compilation
+pnpm run start    # Production server
+pnpm run clean    # Remove dist folder
 ```
 
 ### Frontend (`apps/frontend`)
 
 ```bash
 cd apps/frontend
-npm run dev      # Next.js development server
-npm run build    # Next.js production build
-npm run start    # Next.js production server
-npm run lint     # ESLint
-npm run clean    # Remove .next folder
+pnpm run dev      # Next.js development server
+pnpm run build    # Next.js production build
+pnpm run start    # Next.js production server
+pnpm run lint     # ESLint
+pnpm run clean    # Remove .next folder
 ```
 
 ### Shared Types (`packages/shared-types`)
 
 ```bash
 cd packages/shared-types
-npm run dev      # TypeScript watch mode
-npm run build    # TypeScript compilation
-npm run clean    # Remove dist folder
+pnpm run dev      # TypeScript watch mode
+pnpm run build    # TypeScript compilation
+pnpm run clean    # Remove dist folder
 ```
 
 ## API Endpoints
@@ -161,14 +161,14 @@ The `@ebuddy/shared-types` package contains:
 
 ## Monorepo Commands Summary
 
-| Command            | Description                     |
-| ------------------ | ------------------------------- |
-| `npm run build`    | Build all packages              |
-| `npm run dev:all`  | Run all packages in development |
-| `npm run backend`  | Run backend only                |
-| `npm run frontend` | Run frontend only               |
-| `npm run shared`   | Run shared types in watch mode  |
-| `npm run lint`     | Lint all packages               |
-| `npm run clean`    | Clean all build artifacts       |
+| Command             | Description                     |
+| ------------------- | ------------------------------- |
+| `pnpm run build`    | Build all packages              |
+| `pnpm run dev:all`  | Run all packages in development |
+| `pnpm run backend`  | Run backend only                |
+| `pnpm run frontend` | Run frontend only               |
+| `pnpm run shared`   | Run shared types in watch mode  |
+| `pnpm run lint`     | Lint all packages               |
+| `pnpm run clean`    | Clean all build artifacts       |
 
 This monorepo setup ensures type consistency across the full stack while maintaining independent package development and deployment capabilities.
